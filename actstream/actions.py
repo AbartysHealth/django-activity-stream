@@ -2,10 +2,13 @@ from django.apps import apps
 from django.utils.translation import ugettext_lazy as _
 from django.utils.six import text_type
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 
 from actstream import settings
 from actstream.signals import action
 from actstream.registry import check
+
+
 
 try:
     from django.utils import timezone
@@ -114,6 +117,7 @@ def action_handler(verb, **kwargs):
     """
     Handler function to create Action instance upon action signal call.
     """
+    db = kwargs.pop('db', getattr(settings, 'DEFAULT_DB_ALIAS', 'default'))
     kwargs.pop('signal', None)
     actor = kwargs.pop('sender')
 
@@ -122,8 +126,9 @@ def action_handler(verb, **kwargs):
     if hasattr(verb, '_proxy____args'):
         verb = verb._proxy____args[0]
 
-    newaction = apps.get_model('actstream', 'action')(
-        actor_content_type=ContentType.objects.get_for_model(actor),
+    action_model = apps.get_model('actstream', 'action')
+    newaction = action_model(
+        actor_content_type=ContentType.objects.db_manager(db).get_for_model(actor),
         actor_object_id=actor.pk,
         verb=text_type(verb),
         public=bool(kwargs.pop('public', True)),
@@ -137,8 +142,8 @@ def action_handler(verb, **kwargs):
             check(obj)
             setattr(newaction, '%s_object_id' % opt, obj.pk)
             setattr(newaction, '%s_content_type' % opt,
-                    ContentType.objects.get_for_model(obj))
+                    ContentType.objects.db_manager(db).get_for_model(obj))
     if settings.USE_JSONFIELD and len(kwargs):
         newaction.data = kwargs
-    newaction.save(force_insert=True)
+    newaction.save(force_insert=True, using=db)
     return newaction

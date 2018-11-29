@@ -123,6 +123,22 @@ class Action(models.Model):
         'action_object_object_id'
     )
 
+
+    permission_content_type = models.ForeignKey(
+            ContentType, blank=True, null=True,
+            related_name='activity_permission',
+            on_delete=models.CASCADE, db_index=True
+    )
+    permission_object_id = models.CharField(
+            max_length=255, blank=True, null=True, db_index=True
+    )
+    permission = GenericForeignKey(
+            'permission_content_type',
+            'permission_object_id'
+    )
+
+    parent_activity = models.ForeignKey("Action", on_delete=models.DO_NOTHING, null=True, blank=True)
+
     timestamp = models.DateTimeField(default=now, db_index=True)
 
     public = models.BooleanField(default=True, db_index=True)

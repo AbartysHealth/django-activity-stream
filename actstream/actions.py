@@ -120,6 +120,7 @@ def action_handler(verb, **kwargs):
     db = kwargs.pop('db', getattr(settings, 'DEFAULT_DB_ALIAS', 'default'))
     kwargs.pop('signal', None)
     actor = kwargs.pop('sender')
+    parent_activity = kwargs.pop('parent_activity', None)
 
     # We must store the unstranslated string
     # If verb is an ugettext_lazyed string, fetch the original string
@@ -133,10 +134,11 @@ def action_handler(verb, **kwargs):
         verb=text_type(verb),
         public=bool(kwargs.pop('public', True)),
         description=kwargs.pop('description', None),
-        timestamp=kwargs.pop('timestamp', now())
+        timestamp=kwargs.pop('timestamp', now()),
+        parent_activity = parent_activity
     )
 
-    for opt in ('target', 'action_object'):
+    for opt in ('target', 'action_object', 'permission'):
         obj = kwargs.pop(opt, None)
         if obj is not None:
             check(obj)

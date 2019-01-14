@@ -87,6 +87,13 @@ class Action(models.Model):
         <a href="http://oebfare.com/">brosner</a> commented on <a href="http://github.com/pinax/pinax">pinax/pinax</a> 2 hours ago
 
     """
+    INSURELYNK_LOG = 1
+    PATIENTLYNK_LOG = 2
+    PROVIDERLYNK_LOG = 3
+    ACTIVITY_TYPES_CHOICES = ((INSURELYNK_LOG, "INSURELYNK_LOG"),
+                              (PATIENTLYNK_LOG, "PATIENTLYNK_LOG"),
+                              (PROVIDERLYNK_LOG, "PROVIDERLYNK_LOG"))
+
     actor_content_type = models.ForeignKey(
         ContentType, related_name='actor',
         on_delete=models.CASCADE, db_index=True
@@ -137,7 +144,9 @@ class Action(models.Model):
             'permission_object_id'
     )
 
-    parent_activity = models.ForeignKey("Action", on_delete=models.DO_NOTHING, null=True, blank=True)
+    parent_activity = models.ForeignKey("Action", on_delete=models.DO_NOTHING, null=True, blank=True, related_name="children_activities")
+
+    type = models.SmallIntegerField(choices=ACTIVITY_TYPES_CHOICES)
 
     timestamp = models.DateTimeField(default=now, db_index=True)
 

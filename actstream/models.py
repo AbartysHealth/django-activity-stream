@@ -146,7 +146,7 @@ class Action(models.Model):
 
     parent_activity = models.ForeignKey("Action", on_delete=models.DO_NOTHING, null=True, blank=True, related_name="children_activities")
 
-    type = models.SmallIntegerField(choices=ACTIVITY_TYPES_CHOICES)
+    type = models.SmallIntegerField(choices=ACTIVITY_TYPES_CHOICES, null=True, blank=True)
 
     timestamp = models.DateTimeField(default=now, db_index=True)
 

@@ -121,6 +121,7 @@ def action_handler(verb, **kwargs):
     kwargs.pop('signal', None)
     actor = kwargs.pop('sender')
     parent_activity = kwargs.pop('parent_activity', None)
+    activity_type = kwargs.pop('type', None)
 
     # We must store the unstranslated string
     # If verb is an ugettext_lazyed string, fetch the original string
@@ -135,7 +136,8 @@ def action_handler(verb, **kwargs):
         public=bool(kwargs.pop('public', True)),
         description=kwargs.pop('description', None),
         timestamp=kwargs.pop('timestamp', now()),
-        parent_activity = parent_activity
+        parent_activity=parent_activity,
+        type=activity_type
     )
 
     for opt in ('target', 'action_object', 'permission'):

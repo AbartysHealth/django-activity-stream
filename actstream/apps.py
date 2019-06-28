@@ -15,7 +15,8 @@ class ActstreamConfig(AppConfig):
 
         if settings.USE_JSONFIELD:
             try:
-                from jsonfield_compat import JSONField, register_app
+                from django_mysql.models import JSONField
+                from jsonfield_compat import register_app
             except ImportError:
                 raise ImproperlyConfigured(
                     'You must have django-jsonfield and django-jsonfield-compat '

@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timesince import timesince as djtimesince
 from django.contrib.contenttypes.models import ContentType
+from uuid import UUID
 
 try:
     from django.urls import reverse
@@ -56,7 +57,18 @@ class Follow(models.Model):
     def __str__(self):
         return '%s -> %s : %s' % (self.user, self.follow_object, self.flag)
 
+"""
+Important: Adding special CHARFIELD to avoid writting UUIDs with hyphens. 
+"""
+class CharField_ID(models.CharField):
+    def to_python(self, value):
+        if isinstance(value, str) or value is None:
+            return value
+        elif isinstance(value, UUID):  # Make sure UUIDs are saved without hyphens.
+            return value.hex
+        return str(value)
 
+    
 @python_2_unicode_compatible
 class Action(models.Model):
     """
@@ -98,7 +110,7 @@ class Action(models.Model):
         ContentType, related_name='actor',
         on_delete=models.CASCADE, db_index=True
     )
-    actor_object_id = models.CharField(max_length=255, db_index=True)
+    actor_object_id = CharField_ID(max_length=255, db_index=True)
     actor = GenericForeignKey('actor_content_type', 'actor_object_id')
 
     verb = models.CharField(max_length=255, db_index=True)
@@ -109,7 +121,7 @@ class Action(models.Model):
         related_name='target',
         on_delete=models.CASCADE, db_index=True
     )
-    target_object_id = models.CharField(
+    target_object_id = CharField_ID(
         max_length=255, blank=True, null=True, db_index=True
     )
     target = GenericForeignKey(
@@ -122,7 +134,7 @@ class Action(models.Model):
         related_name='action_object',
         on_delete=models.CASCADE, db_index=True
     )
-    action_object_object_id = models.CharField(
+    action_object_object_id = CharField_ID(
         max_length=255, blank=True, null=True, db_index=True
     )
     action_object = GenericForeignKey(
@@ -136,7 +148,7 @@ class Action(models.Model):
             related_name='activity_permission',
             on_delete=models.CASCADE, db_index=True
     )
-    permission_object_id = models.CharField(
+    permission_object_id = CharField_ID(
             max_length=255, blank=True, null=True, db_index=True
     )
     permission = GenericForeignKey(

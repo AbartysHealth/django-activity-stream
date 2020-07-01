@@ -1,8 +1,26 @@
+import json
+from datetime import datetime, time
+from uuid import UUID
+
 from django.apps import AppConfig
 from django.core.exceptions import ImproperlyConfigured
 
 from actstream import settings
 from actstream.signals import action
+
+
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, UUID):
+            # if the obj is uuid, we simply return the value of uuid
+            return str(obj)
+
+        if isinstance(obj, datetime):
+            return str(obj)
+
+        if isinstance(obj, time):
+            return str(obj)
+        return json.JSONEncoder.default(self, obj)
 
 
 class ActstreamConfig(AppConfig):
@@ -22,5 +40,5 @@ class ActstreamConfig(AppConfig):
                     'You must have django-jsonfield and django-jsonfield-compat '
                     'installed if you wish to use a JSONField on your actions'
                 )
-            JSONField(blank=True, null=True).contribute_to_class(action_class, 'data')
+            JSONField(blank=True, null=True, encoder=CustomEncoder(allow_nan=False)).contribute_to_class(action_class, 'data')
             register_app(self)

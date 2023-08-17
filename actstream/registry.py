@@ -5,7 +5,7 @@ from django.apps import apps
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models.base import ModelBase
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.six import string_types
+from six import string_types
 
 
 class RegistrationError(Exception):

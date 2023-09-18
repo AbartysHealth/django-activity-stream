@@ -1,6 +1,6 @@
 from django.apps import apps
 from django.utils.translation import ugettext_lazy as _
-from django.utils.six import text_type
+from six import text_type
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 

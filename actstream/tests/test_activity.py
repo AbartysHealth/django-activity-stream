@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import activate, get_language
-from django.utils.six import text_type
+from six import text_type
 
 try:
     from django.urls import reverse

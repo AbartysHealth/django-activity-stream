@@ -5,12 +5,12 @@ from inspect import getargspec
 from django.apps import apps
 from django.test import TestCase
 from django.template import Template, Context
-from django.utils.six import text_type
 from django.utils.timesince import timesince
 from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from six import text_type
 
 try:
     from django.core.urlresolvers import reverse

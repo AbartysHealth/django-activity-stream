@@ -2,17 +2,12 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.db import models
-from django.utils.translation import ugettext as _
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.timesince import timesince as djtimesince
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.urls import reverse
+from django.utils.translation import ugettext as _
+from django.utils.timesince import timesince as djtimesince
 from uuid import UUID
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
 
 try:
     from django.utils import timezone
@@ -28,7 +23,6 @@ from actstream.managers import FollowManager
 now = timezone.now
 
 
-@python_2_unicode_compatible
 class Follow(models.Model):
     """
     Lets a user follow the activities of any specific actor
@@ -68,8 +62,7 @@ class CharField_ID(models.CharField):
             return value.hex
         return str(value)
 
-    
-@python_2_unicode_compatible
+
 class Action(models.Model):
     """
     Action model describing the actor acting out a verb (on an optional

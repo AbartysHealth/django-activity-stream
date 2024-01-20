@@ -15,6 +15,10 @@ setup(name='django-activity-stream',
                 'actstream.templatetags',
                 'actstream.tests',
                 ],
+      requires=[
+          'six>=1.16.0,<2.0.0',
+          'django>=3.2'
+      ],
       package_data={'actstream': ['locale/*/LC_MESSAGES/*.po',
                                   'templates/actstream/*.html']},
       classifiers=['Development Status :: 5 - Production/Stable',
@@ -27,7 +31,6 @@ setup(name='django-activity-stream',
                    'Programming Language :: Python :: 3',
                    'Topic :: Utilities'],
       extras_require={
-        'jsonfield': ['django-jsonfield>=1.0.1',
-                      'django-jsonfield-compat>=0.4.4'],
+        'jsonfield': ['django-jsonfield-compat>=0.4.4'],
       },
       )

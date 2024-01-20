@@ -16,7 +16,7 @@ setup(name='django-activity-stream',
                 'actstream.tests',
                 ],
       requires=[
-          'six>=1.16.0,<2.0.0',
+          'six>=1.16.0',
           'django>=3.2'
       ],
       package_data={'actstream': ['locale/*/LC_MESSAGES/*.po',

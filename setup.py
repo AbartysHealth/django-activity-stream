@@ -15,8 +15,8 @@ setup(name='django-activity-stream',
                 'actstream.templatetags',
                 'actstream.tests',
                 ],
-      requires=[
-          'six>=1.16.0',
+      install_requires=[
+          'six>=1.16.0,<2.0.0',
           'django>=3.2'
       ],
       package_data={'actstream': ['locale/*/LC_MESSAGES/*.po',

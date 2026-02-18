@@ -1,5 +1,5 @@
 from django.apps import apps
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from six import text_type
@@ -124,7 +124,7 @@ def action_handler(verb, **kwargs):
     activity_type = kwargs.pop('type', None)
 
     # We must store the unstranslated string
-    # If verb is an ugettext_lazyed string, fetch the original string
+    # If verb is an gettext_lazy string, fetch the original string
     if hasattr(verb, '_proxy____args'):
         verb = verb._proxy____args[0]
 

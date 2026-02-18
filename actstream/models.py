@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
+from uuid import UUID
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.timesince import timesince as djtimesince
-from uuid import UUID
 
 try:
     from django.utils import timezone
@@ -134,7 +134,6 @@ class Action(models.Model):
         'action_object_content_type',
         'action_object_object_id'
     )
-
 
     permission_content_type = models.ForeignKey(
             ContentType, blank=True, null=True,

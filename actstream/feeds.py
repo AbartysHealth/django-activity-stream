@@ -1,21 +1,22 @@
 import json
+from datetime import datetime
 
-from django.shortcuts import get_object_or_404
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.feedgenerator import Atom1Feed, rfc3339_date
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.syndication.views import Feed, add_domain
 from django.contrib.sites.models import Site
-from django.utils.encoding import force_text
-from six import text_type
-from django.utils import datetime_safe
+from django.contrib.syndication.views import Feed, add_domain
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404
+from django.utils.encoding import force_str
+from django.utils.feedgenerator import Atom1Feed, rfc3339_date
 from django.views.generic import View
-from django.http import HttpResponse, Http404
 
 try:
     from django.core.urlresolvers import reverse
 except ImportError:
     from django.urls import reverse
+
+from six import text_type
 
 from actstream.models import Action, model_stream, user_stream, any_stream
 
@@ -49,7 +50,7 @@ class AbstractActivityStream(object):
         """
         if date is None:
             date = action.timestamp
-        date = datetime_safe.new_datetime(date).strftime('%Y-%m-%d')
+        date = datetime(date.year, date.month, date.day).strftime('%Y-%m-%d')
         return 'tag:%s,%s:%s' % (Site.objects.get_current().domain, date,
                                  self.get_url(action, obj, False))
 
@@ -203,7 +204,7 @@ class ActivityStreamsBaseFeed(AbstractActivityStream, Feed):
 
     def item_description(self, action):
         if action.description:
-            return force_text(action.description)
+            return force_str(action.description)
 
     def items(self, obj):
         return self.get_stream()(obj)[:30]

@@ -3,7 +3,6 @@ from datetime import datetime, time
 from uuid import UUID
 
 from django.apps import AppConfig
-from django.core.exceptions import ImproperlyConfigured
 
 from actstream import settings
 from actstream.signals import action
@@ -32,13 +31,9 @@ class ActstreamConfig(AppConfig):
         action_class = self.get_model('action')
 
         if settings.USE_JSONFIELD:
-            try:
-                from django.db.models import JSONField
-                from jsonfield_compat import register_app
-            except ImportError:
-                raise ImproperlyConfigured(
-                    'You must have django-jsonfield and django-jsonfield-compat '
-                    'installed if you wish to use a JSONField on your actions'
-                )
-            JSONField(blank=True, null=True, encoder=CustomEncoder).contribute_to_class(action_class, 'data')
-            register_app(self)
+            from django.db.models import JSONField
+            JSONField(
+                blank=True,
+                null=True,
+                encoder=CustomEncoder
+            ).contribute_to_class(action_class, 'data')

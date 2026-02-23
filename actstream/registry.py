@@ -4,7 +4,6 @@ from django.apps import apps
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models.base import ModelBase
 from django.core.exceptions import ImproperlyConfigured
-from six import string_types
 
 
 class RegistrationError(Exception):
@@ -56,13 +55,14 @@ def label(model_class):
 def is_installed(model_class):
     """
     Returns True if a model_class is installed.
-    model_class._meta.installed is only reliable in Django 1.7+
+    In Django 5.0+, we check if the app is in apps registry.
     """
-    return model_class._meta.installed
+    app_label = model_class._meta.app_label
+    return app_label in apps.app_configs
 
 
 def validate(model_class, exception_class=ImproperlyConfigured):
-    if isinstance(model_class, string_types):
+    if isinstance(model_class, str):
         model_class = apps.get_model(*model_class.split('.'))
     if not isinstance(model_class, ModelBase):
         raise exception_class(

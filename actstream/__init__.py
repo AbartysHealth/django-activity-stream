@@ -5,4 +5,3 @@ except:
 
 __version__ = '0.7.0'
 __author__ = 'Justin Quick <justquick@gmail.com>'
-default_app_config = 'actstream.apps.ActstreamConfig'

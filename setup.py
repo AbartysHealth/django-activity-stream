@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 from actstream import __version__
 
 setup(name='django-activity-stream',
@@ -16,7 +16,6 @@ setup(name='django-activity-stream',
                 'actstream.tests',
                 ],
       install_requires=[
-          'six>=1.16.0,<2.0.0',
           'django>=3.2'
       ],
       package_data={'actstream': ['locale/*/LC_MESSAGES/*.po',

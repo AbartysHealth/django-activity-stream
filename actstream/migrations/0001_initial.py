@@ -9,7 +9,11 @@ from django.conf import settings
 from actstream.settings import USE_JSONFIELD
 
 if USE_JSONFIELD:
-    from jsonfield_compat.fields import JSONField as DataField
+    try:
+        from jsonfield_compat.fields import JSONField as DataField
+    except (ImportError, AttributeError):
+        # Django 3.1+ has native JSONField
+        from django.db.models import JSONField as DataField
 else:
     DataField = models.TextField
 

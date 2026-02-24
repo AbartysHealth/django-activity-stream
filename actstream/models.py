@@ -46,12 +46,7 @@ class Follow(models.Model):
     objects = FollowManager()
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'content_type', 'object_id', 'flag'],
-                name='unique_follow'
-            )
-        ]
+        unique_together = ('user', 'content_type', 'object_id', 'flag')
 
     def __str__(self):
         return '%s -> %s : %s' % (self.user, self.follow_object, self.flag)
